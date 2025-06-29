@@ -104,7 +104,10 @@ project(':students-service') {
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
         runtimeOnly 'org.postgresql:postgresql'  // PostgreSQL driver
-        implementation 'org.flywaydb:flyway-core'  // Database migrations
+
+        // Database migrations
+        implementation 'org.flywaydb:flyway-core:10.10.0'
+        implementation 'org.flywaydb:flyway-database-postgresql:10.10.0'
 
         implementation project(':common')  // Reuse common module
     }
@@ -118,7 +121,9 @@ project(':classes-service') {
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
         runtimeOnly 'org.postgresql:postgresql'
-        implementation 'org.flywaydb:flyway-core'
+
+        implementation 'org.flywaydb:flyway-core:10.10.0'
+        implementation 'org.flywaydb:flyway-database-postgresql:10.10.0'
 
         implementation project(':common')  // Reuse common module
     }
