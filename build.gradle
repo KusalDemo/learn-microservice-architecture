@@ -73,9 +73,9 @@ project(':discovery-service') {
 // API Gateway Module
 project(':api-gateway') {
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-        implementation 'org.springframework.cloud:spring-cloud-starter-gateway'  // Spring Cloud Gateway
+        implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     }
 }
 
