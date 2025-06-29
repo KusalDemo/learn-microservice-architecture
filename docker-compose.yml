@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  postgres-students:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: simplehrms_students
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-students-data:/var/lib/postgresql/data
+
+  postgres-classes:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: simplehrms_classes
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-classes-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-students-data:
+  postgres-classes-data:
