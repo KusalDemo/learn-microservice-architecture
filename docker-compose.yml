@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres-students-data:/var/lib/postgresql/data
+    networks:
+      - hrms-network
 
   postgres-classes:
     image: postgres:15
@@ -21,6 +23,65 @@ services:
       - "5433:5432"
     volumes:
       - postgres-classes-data:/var/lib/postgresql/data
+    networks:
+      - hrms-network
+
+  discovery-service:
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8761:8761"
+    networks:
+      - hrms-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8080:8080"
+    depends_on:
+      - discovery-service
+    networks:
+      - hrms-network
+
+  students-service:
+    build:
+      context: ./students-service
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8081:8081"
+    depends_on:
+      - discovery-service
+      - postgres-students
+    networks:
+      - hrms-network
+
+  classes-service:
+    build:
+      context: ./classes-service
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8082:8082"
+    depends_on:
+      - discovery-service
+      - postgres-classes
+      - students-service
+    networks:
+      - hrms-network
+
+networks:
+  hrms-network:
+    driver: bridge
 
 volumes:
   postgres-students-data:

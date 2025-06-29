@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: students-service
+          uri: lb://students-service
+          predicates:
+            - Path=/api/students/**, /students/v3/api-docs/**
+        - id: classes-service
+          uri: lb://classes-service
+          predicates:
+            - Path=/api/classes/**, /classes/v3/api-docs/**
+        - id: actuator-routes
+          uri: lb://api-gateway
+          predicates:
+            - Path=/actuator/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    hostname: api-gateway
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    lease-renewal-interval-in-seconds: 30
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - name: students-service
+        url: /students/v3/api-docs
+      - name: classes-service
+        url: /classes/v3/api-docs
